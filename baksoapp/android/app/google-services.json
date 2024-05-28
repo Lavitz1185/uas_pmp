@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "713724008060",
+    "project_id": "uaspmp-15496",
+    "storage_bucket": "uaspmp-15496.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713724008060:android:767a72cdce6212810c9bf9",
+        "android_client_info": {
+          "package_name": "com.example.baksoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsH33qg-FlJLTIY8BfoRa6vsN-R4qHPmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
