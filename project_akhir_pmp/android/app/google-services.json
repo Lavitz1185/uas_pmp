@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "22137644055",
+    "project_id": "project-akhir-pmp",
+    "storage_bucket": "project-akhir-pmp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22137644055:android:a9a7d1b7e0e62dff1ea852",
+        "android_client_info": {
+          "package_name": "com.example.project_akhir_pmp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMKUQk03Ze7Cb56b5uaxcn3ukiB79L60U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
