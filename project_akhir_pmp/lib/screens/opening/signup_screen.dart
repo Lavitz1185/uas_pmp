@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:project_akhir_pmp/screens/forget_password_screen.dart';
-import 'package:project_akhir_pmp/screens/home/home_screen.dart';
-import 'package:project_akhir_pmp/screens/signup_screen.dart';
+import 'package:project_akhir_pmp/screens/opening/signin_screen.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 import 'package:project_akhir_pmp/widgets/custom_scaffold.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SigninScreenState extends State<SigninScreen> {
-  final _formSignInKey = GlobalKey<FormState>();
-  bool rememberPassword = true;
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formSignupKey = GlobalKey<FormState>();
+  bool agreePersonalData = true;
   bool _isPasswordVisible = false;
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -32,7 +29,7 @@ class _SigninScreenState extends State<SigninScreen> {
           Expanded(
             flex: 7,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 20.0),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -41,22 +38,56 @@ class _SigninScreenState extends State<SigninScreen> {
                 ),
               ),
               child: SingleChildScrollView(
+                // get started form
                 child: Form(
-                  key: _formSignInKey,
+                  key: _formSignupKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // get started text
                       Text(
-                        'Welcome Back',
+                        'Get Started',
                         style: TextStyle(
                           fontSize: 30.0,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w900,
                           color: lightColorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40.0,
+                      ),
+                      // full name
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter Full name';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          label: const Text('Full Name'),
+                          hintText: 'Enter Full Name',
+                          hintStyle: const TextStyle(
+                            color: Colors.black26,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12, // Default border color
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12, // Default border color
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // email
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -87,6 +118,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // password
                       TextFormField(
                         obscureText: !_isPasswordVisible,
                         obscuringCharacter: '*',
@@ -131,44 +163,29 @@ class _SigninScreenState extends State<SigninScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // i agree to the processing
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: rememberPassword,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    rememberPassword = value!;
-                                  });
-                                },
-                                activeColor: lightColorScheme.primary,
-                              ),
-                              const Text(
-                                'Remember me',
-                                style: TextStyle(
-                                  color: Colors.black45,
-                                ),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgetPasswordScreen(),
-                                ),
-                              );
+                          Checkbox(
+                            value: agreePersonalData,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                agreePersonalData = value!;
+                              });
                             },
-                            child: Text(
-                              'Forget password?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: lightColorScheme.primary,
-                              ),
+                            activeColor: lightColorScheme.primary,
+                          ),
+                          const Text(
+                            'I agree to the processing of ',
+                            style: TextStyle(
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            'Personal data',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: lightColorScheme.primary,
                             ),
                           ),
                         ],
@@ -176,18 +193,19 @@ class _SigninScreenState extends State<SigninScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // signup button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formSignInKey.currentState!.validate() &&
-                                rememberPassword) {
+                            if (_formSignupKey.currentState!.validate() &&
+                                agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Processing Data'),
                                 ),
                               );
-                            } else if (!rememberPassword) {
+                            } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text(
@@ -195,20 +213,13 @@ class _SigninScreenState extends State<SigninScreen> {
                               );
                             }
                           },
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HomeScreen()));
-                              },
-                              child: const Text('Sign In')),
+                          child: const Text('Sign up'),
                         ),
                       ),
                       const SizedBox(
-                        height: 25.0,
+                        height: 30.0,
                       ),
+                      // sign up divider
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -239,8 +250,9 @@ class _SigninScreenState extends State<SigninScreen> {
                         ],
                       ),
                       const SizedBox(
-                        height: 25.0,
+                        height: 30.0,
                       ),
+                      // sign up social media logo
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -253,11 +265,12 @@ class _SigninScreenState extends State<SigninScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // already have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'Don\'t have an account? ',
+                            'Already have an account? ',
                             style: TextStyle(
                               color: Colors.black45,
                             ),
@@ -267,12 +280,12 @@ class _SigninScreenState extends State<SigninScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (e) => const SignUpScreen(),
+                                  builder: (e) => const SigninScreen(),
                                 ),
                               );
                             },
                             child: Text(
-                              'Sign up',
+                              'Sign in',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: lightColorScheme.primary,

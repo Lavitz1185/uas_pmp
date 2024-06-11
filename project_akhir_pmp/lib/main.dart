@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project_akhir_pmp/screens/welcome_screen.dart';
+import 'package:project_akhir_pmp/screens/opening/welcome_screen.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 
 void main() async {

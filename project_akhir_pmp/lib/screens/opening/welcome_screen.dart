@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_akhir_pmp/screens/signin_screen.dart';
-import 'package:project_akhir_pmp/screens/signup_screen.dart';
+import 'package:project_akhir_pmp/screens/opening/signin_screen.dart';
+import 'package:project_akhir_pmp/screens/opening/signup_screen.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 import 'package:project_akhir_pmp/widgets/custom_scaffold.dart';
 import 'package:project_akhir_pmp/widgets/welcome_button.dart';

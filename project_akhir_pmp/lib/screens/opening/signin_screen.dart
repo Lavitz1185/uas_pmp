@@ -1,20 +1,36 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:project_akhir_pmp/screens/signin_screen.dart';
+import 'package:project_akhir_pmp/screens/opening/forget_password_screen.dart';
+import 'package:project_akhir_pmp/screens/home/home_screen.dart';
+import 'package:project_akhir_pmp/screens/opening/signup_screen.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 import 'package:project_akhir_pmp/widgets/custom_scaffold.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SigninScreen extends StatefulWidget {
+  const SigninScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SigninScreen> createState() => _SigninScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final _formSignupKey = GlobalKey<FormState>();
-  bool agreePersonalData = true;
+class _SigninScreenState extends State<SigninScreen> {
+  final _formSignInKey = GlobalKey<FormState>();
+  bool rememberPassword = true;
   bool _isPasswordVisible = false;
+
+  // Deklarasi controller untuk email dan password
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Membersihkan controller
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -29,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Expanded(
             flex: 7,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 20.0),
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -38,57 +54,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               child: SingleChildScrollView(
-                // get started form
                 child: Form(
-                  key: _formSignupKey,
+                  key: _formSignInKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // get started text
                       Text(
-                        'Get Started',
+                        'Welcome Back',
                         style: TextStyle(
                           fontSize: 30.0,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           color: lightColorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      // full name
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Full name';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          label: const Text('Full Name'),
-                          hintText: 'Enter Full Name',
-                          hintStyle: const TextStyle(
-                            color: Colors.black26,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // email
                       TextFormField(
+                        controller:
+                            emailController, // Gunakan controller untuk email
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -118,8 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // password
                       TextFormField(
+                        controller:
+                            passwordController, // Gunakan controller untuk password
                         obscureText: !_isPasswordVisible,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -163,29 +148,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // i agree to the processing
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Checkbox(
-                            value: agreePersonalData,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                agreePersonalData = value!;
-                              });
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: rememberPassword,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    rememberPassword = value!;
+                                  });
+                                },
+                                activeColor: lightColorScheme.primary,
+                              ),
+                              const Text(
+                                'Remember me',
+                                style: TextStyle(
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgetPasswordScreen(),
+                                ),
+                              );
                             },
-                            activeColor: lightColorScheme.primary,
-                          ),
-                          const Text(
-                            'I agree to the processing of ',
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
-                          ),
-                          Text(
-                            'Personal data',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: lightColorScheme.primary,
+                            child: Text(
+                              'Forget password?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: lightColorScheme.primary,
+                              ),
                             ),
                           ),
                         ],
@@ -193,33 +193,67 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // signup button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formSignupKey.currentState!.validate() &&
-                                agreePersonalData) {
+                          onPressed: () async {
+                            if (_formSignInKey.currentState!.validate() &&
+                                rememberPassword) {
+                              // Memanggil fungsi signIn dengan email dan password dari controller
+                              try {
+                                await signIn(emailController.text,
+                                    passwordController.text);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HomeScreen(),
+                                  ),
+                                );
+                              } catch (error) {
+                                // Menampilkan pesan kesalahan sesuai dengan jenis kesalahan
+                                if (error is FirebaseAuthException) {
+                                  if (error.code == 'user-not-found') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Email not found'),
+                                      ),
+                                    );
+                                  } else if (error.code == 'wrong-password') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Wrong password'),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Error signing in'),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Error signing in'),
+                                    ),
+                                  );
+                                }
+                              }
+                            } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Processing Data'),
+                                  content: Text(
+                                      'Please agree to the processing of personal data'),
                                 ),
-                              );
-                            } else if (!agreePersonalData) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of personal data')),
                               );
                             }
                           },
-                          child: const Text('Sign up'),
+                          child: const Text('Sign In'),
                         ),
                       ),
                       const SizedBox(
-                        height: 30.0,
+                        height: 25.0,
                       ),
-                      // sign up divider
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -250,9 +284,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ],
                       ),
                       const SizedBox(
-                        height: 30.0,
+                        height: 25.0,
                       ),
-                      // sign up social media logo
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -265,12 +298,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // already have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'Already have an account? ',
+                            'Don\'t have an account? ',
                             style: TextStyle(
                               color: Colors.black45,
                             ),
@@ -280,12 +312,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (e) => const SigninScreen(),
+                                  builder: (e) => const SignUpScreen(),
                                 ),
                               );
                             },
                             child: Text(
-                              'Sign in',
+                              'Sign up',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: lightColorScheme.primary,
@@ -306,5 +338,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
     );
+  }
+}
+
+// Fungsi untuk melakukan sign in
+Future<void> signIn(String email, String password) async {
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    // Jika berhasil, lanjutkan ke halaman selanjutnya atau tampilkan pesan sukses
+  } catch (error) {
+    // Handle error
+    print('Sign in error: $error');
   }
 }
