@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:project_akhir_pmp/screens/forget_password_screen.dart';
+import 'package:project_akhir_pmp/screens/home/home_screen.dart';
 import 'package:project_akhir_pmp/screens/signup_screen.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 import 'package:project_akhir_pmp/widgets/custom_scaffold.dart';
@@ -14,6 +16,8 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreenState extends State<SigninScreen> {
   final _formSignInKey = GlobalKey<FormState>();
   bool rememberPassword = true;
+  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -84,7 +88,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         height: 25.0,
                       ),
                       TextFormField(
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         obscuringCharacter: '*',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -97,6 +101,18 @@ class _SigninScreenState extends State<SigninScreen> {
                           hintText: 'Enter Password',
                           hintStyle: const TextStyle(
                             color: Colors.black26,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
@@ -138,6 +154,15 @@ class _SigninScreenState extends State<SigninScreen> {
                             ],
                           ),
                           GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgetPasswordScreen(),
+                                ),
+                              );
+                            },
                             child: Text(
                               'Forget password?',
                               style: TextStyle(
@@ -170,7 +195,15 @@ class _SigninScreenState extends State<SigninScreen> {
                               );
                             }
                           },
-                          child: const Text('Sign up'),
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeScreen()));
+                              },
+                              child: const Text('Sign In')),
                         ),
                       ),
                       const SizedBox(

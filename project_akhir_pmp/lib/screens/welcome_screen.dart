@@ -27,7 +27,7 @@ class WelcomeScreen extends StatelessWidget {
                     TextSpan(
                         text: 'Get Started!\n',
                         style: TextStyle(
-                            fontSize: 45.0, fontWeight: FontWeight.w600)),
+                            fontSize: 45.0, fontWeight: FontWeight.w900)),
                     TextSpan(
                         text: '\nsilahkan otak atik semaumu hehehe...',
                         style: TextStyle(
@@ -52,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   Expanded(
                     child: WelcomeButton(
                       buttonText: 'Sign up',
-                      onTap: SignUpScreen(),
+                      onTap: const SignUpScreen(),
                       color: Colors.white,
                       textColor: lightColorScheme.primary,
                     ),

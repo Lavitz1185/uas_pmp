@@ -14,6 +14,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
+  bool _isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -119,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       // password
                       TextFormField(
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         obscuringCharacter: '*',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -132,6 +133,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hintText: 'Enter Password',
                           hintStyle: const TextStyle(
                             color: Colors.black26,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
