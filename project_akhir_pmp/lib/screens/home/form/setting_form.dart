@@ -24,19 +24,80 @@ class _SettingFormState extends State<SettingForm> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Text(
-                'SETTINGS',
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+            // User Profile Box
+            GestureDetector(
+              onTap: () {
+                // Implement navigation to profile page
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.person, color: Theme.of(context).primaryColor),
+                    SizedBox(width: 16),
+                    Text(
+                      'User Profile',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Implement navigation to profile page
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.sunny, color: Theme.of(context).primaryColor),
+                    SizedBox(width: 16),
+                    Text(
+                      'Theme',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 235, 44, 30)),
               onPressed: () async {
                 await AuthServices().signOut();
                 Navigator.of(context).pushReplacement(
@@ -49,6 +110,9 @@ class _SettingFormState extends State<SettingForm> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.logout),
+                  SizedBox(
+                    width: 8,
+                  ),
                   Text('Log Out'),
                 ],
               ),

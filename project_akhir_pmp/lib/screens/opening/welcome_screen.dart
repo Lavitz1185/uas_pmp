@@ -27,12 +27,14 @@ class WelcomeScreen extends StatelessWidget {
                     TextSpan(
                         text: 'Get Started!\n',
                         style: TextStyle(
-                            fontSize: 45.0, fontWeight: FontWeight.w900)),
+                            fontSize: 45.0,
+                            fontWeight: FontWeight.w900,
+                            color: Color.fromARGB(255, 254, 244, 255))),
                     TextSpan(
                         text: '\nsilahkan otak atik semaumu hehehe...',
                         style: TextStyle(
-                          fontSize: 20,
-                        )),
+                            fontSize: 20,
+                            color: Color.fromARGB(221, 32, 32, 32))),
                   ]),
                 )),
               )),
@@ -46,14 +48,14 @@ class WelcomeScreen extends StatelessWidget {
                       buttonText: 'Sign in',
                       onTap: SigninScreen(),
                       color: Colors.transparent,
-                      textColor: Colors.white,
+                      textColor: Colors.black54,
                     ),
                   ),
                   Expanded(
                     child: WelcomeButton(
                       buttonText: 'Sign up',
                       onTap: const SignUpScreen(),
-                      color: Colors.white,
+                      color: Color.fromARGB(204, 255, 255, 255),
                       textColor: lightColorScheme.primary,
                     ),
                   ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:project_akhir_pmp/theme/theme.dart';
 
 class HomeForm extends StatelessWidget {
-  const HomeForm({super.key});
+  const HomeForm({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +9,10 @@ class HomeForm extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Home',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          'Home',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -20,68 +21,153 @@ class HomeForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // User Profile Card
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                leading:
-                    Icon(Icons.person, color: Theme.of(context).primaryColor),
-                title: Text(
-                  'User Profile',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // User Profile Box
+            GestureDetector(
+              onTap: () {
+                // Implement navigation to profile page
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 73, 165, 240), // Change color here
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                subtitle: Text('View and edit your profile'),
-                onTap: () {
-                  // Implement navigation to profile page
-                },
+                child: Row(
+                  children: [
+                    Icon(Icons.person, color: Colors.white),
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'User Profile',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'View and edit your profile',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            // Settings Card
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                leading:
-                    Icon(Icons.settings, color: Theme.of(context).primaryColor),
-                title: Text(
-                  'Settings',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // Settings Box
+            GestureDetector(
+              onTap: () {
+                // Implement navigation to settings page
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color:
+                      Color.fromARGB(255, 253, 104, 154), // Change color here
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                subtitle: Text('Adjust your preferences'),
-                onTap: () {
-                  // Implement navigation to settings page
-                },
+                child: Row(
+                  children: [
+                    Icon(Icons.settings, color: Colors.white),
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Settings',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Adjust your preferences',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            // Notifications Card
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                leading: Icon(Icons.notifications,
-                    color: Theme.of(context).primaryColor),
-                title: Text(
-                  'Notifications',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // Notifications Box
+            GestureDetector(
+              onTap: () {
+                // Implement navigation to notifications page
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 248, 177, 70), // Change color here
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                subtitle: Text('View recent notifications'),
-                onTap: () {
-                  // Implement navigation to notifications page
-                },
+                child: Row(
+                  children: [
+                    Icon(Icons.notifications, color: Colors.white),
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Notifications',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'View recent notifications',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            // Recent Activities Card
-            Card(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                leading:
-                    Icon(Icons.history, color: Theme.of(context).primaryColor),
-                title: Text(
-                  'Recent Activities',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // Recent Activities Box
+            GestureDetector(
+              onTap: () {
+                // Implement navigation to activity page
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 248, 88, 227), // Change color here
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                subtitle: Text('Check your recent activities'),
-                onTap: () {
-                  // Implement navigation to activity page
-                },
+                child: Row(
+                  children: [
+                    Icon(Icons.history, color: Colors.white),
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Recent Activities',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Check your recent activities',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
