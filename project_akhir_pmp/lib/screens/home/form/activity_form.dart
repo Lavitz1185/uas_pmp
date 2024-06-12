@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class Activity {
   final String id;
@@ -8,6 +9,7 @@ class Activity {
   final String description;
   final DateTime timestamp;
   final IconData icon;
+  final Color backgroundColor;
 
   Activity({
     required this.id,
@@ -15,6 +17,7 @@ class Activity {
     required this.description,
     required this.timestamp,
     required this.icon,
+    required this.backgroundColor,
   });
 
   factory Activity.fromFirestore(DocumentSnapshot doc) {
@@ -25,6 +28,7 @@ class Activity {
       description: data['description'],
       timestamp: (data['timestamp'] as Timestamp).toDate(),
       icon: IconData(data['icon'], fontFamily: 'MaterialIcons'),
+      backgroundColor: Color(data['backgroundColor']),
     );
   }
 
@@ -34,6 +38,7 @@ class Activity {
       'description': description,
       'timestamp': timestamp,
       'icon': icon.codePoint,
+      'backgroundColor': backgroundColor.value,
     };
   }
 
@@ -50,7 +55,7 @@ class Activity {
 }
 
 class ActivityForm extends StatefulWidget {
-  ActivityForm({super.key});
+  ActivityForm({Key? key}) : super(key: key);
 
   @override
   _ActivityFormState createState() => _ActivityFormState();
@@ -59,9 +64,9 @@ class ActivityForm extends StatefulWidget {
 class _ActivityFormState extends State<ActivityForm> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _searchQuery = '';
-  bool _sortAscending = true; // Flag to track sorting order
-
-  IconData _selectedIcon = Icons.event; // Default icon
+  bool _sortAscending = true;
+  IconData _selectedIcon = Icons.event;
+  Color _selectedBackgroundColor = Colors.white;
 
   void _addActivity(Activity activity) async {
     await _firestore.collection('activities').add(activity.toMap());
@@ -111,7 +116,6 @@ class _ActivityFormState extends State<ActivityForm> {
                       children: [
                         IconButton(
                           onPressed: () async {
-                            // Show dialog to pick an icon
                             final selectedIcon = await showDialog<IconData>(
                               context: context,
                               builder: (BuildContext context) {
@@ -150,6 +154,43 @@ class _ActivityFormState extends State<ActivityForm> {
                       controller: _descriptionController,
                       decoration:
                           const InputDecoration(labelText: 'Description'),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Text('Select Background Color:'),
+                        const SizedBox(width: 8.0),
+                        GestureDetector(
+                          onTap: () async {
+                            final selectedColor = await showDialog<Color>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Select Background Color'),
+                                  content: SingleChildScrollView(
+                                    child: BlockPicker(
+                                      pickerColor: _selectedBackgroundColor,
+                                      onColorChanged: (color) {
+                                        Navigator.of(context).pop(color);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                            if (selectedColor != null) {
+                              setState(() {
+                                _selectedBackgroundColor = selectedColor;
+                              });
+                            }
+                          },
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            color: _selectedBackgroundColor,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16.0),
                     Row(
@@ -222,11 +263,12 @@ class _ActivityFormState extends State<ActivityForm> {
                               );
                               if (activity == null) {
                                 final newActivity = Activity(
-                                  id: '', // Firestore will generate the ID
+                                  id: '',
                                   title: _titleController.text,
                                   description: _descriptionController.text,
                                   timestamp: dateTime,
                                   icon: _selectedIcon,
+                                  backgroundColor: _selectedBackgroundColor,
                                 );
                                 _addActivity(newActivity);
                               } else {
@@ -236,6 +278,7 @@ class _ActivityFormState extends State<ActivityForm> {
                                   description: _descriptionController.text,
                                   timestamp: dateTime,
                                   icon: _selectedIcon,
+                                  backgroundColor: _selectedBackgroundColor,
                                 );
                                 _editActivity(updatedActivity);
                               }
@@ -284,7 +327,7 @@ class _ActivityFormState extends State<ActivityForm> {
         title: const Text('Activity',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
         centerTitle: true,
-        automaticallyImplyLeading: false, // Menyembunyikan tombol kembali
+        automaticallyImplyLeading: false,
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -361,6 +404,7 @@ class _ActivityFormState extends State<ActivityForm> {
               return Card(
                 margin:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                color: activity.backgroundColor,
                 child: ListTile(
                   leading: Icon(activity.icon,
                       color: Theme.of(context).primaryColor),
@@ -444,26 +488,26 @@ class IconsData {
     Icons.event,
     Icons.work,
     Icons.school,
-    Icons.home,
-    Icons.directions_run,
-    Icons.restaurant,
-    Icons.shopping_cart,
-    Icons.airplane_ticket,
-    Icons.book,
-    Icons.brush,
-    Icons.camera,
-    Icons.sports_soccer,
-    Icons.music_note,
-    Icons.local_movies,
-    Icons.event_seat,
-    Icons.star,
-    Icons.local_pizza,
-    Icons.card_giftcard,
-    Icons.pets,
-    Icons.train,
-    Icons.business,
-    Icons.airport_shuttle,
-    Icons.beach_access,
-    Icons.toys,
+    // Icons.home,
+    // Icons.directions_run,
+    // Icons.restaurant,
+    // Icons.shopping_cart,
+    // Icons.airplane_ticket,
+    // Icons.book,
+    // Icons.brush,
+    // Icons.camera,
+    // Icons.sports_soccer,
+    // Icons.music_note,
+    // Icons.local_movies,
+    // Icons.event_seat,
+    // Icons.star,
+    // Icons.local_pizza,
+    // Icons.card_giftcard,
+    // Icons.pets,
+    // Icons.train,
+    // Icons.business,
+    // Icons.airport_shuttle,
+    // Icons.beach_access,
+    // Icons.toys,
   ];
 }
