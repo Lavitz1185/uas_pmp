@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project_akhir_pmp/screens/home/home_screen.dart';
 import 'package:project_akhir_pmp/screens/opening/welcome_screen.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 
@@ -18,7 +20,16 @@ class MyApp extends StatelessWidget {
       title: 'Project Akhir PMP',
       debugShowCheckedModeBanner: false,
       theme: lightMode,
-      home: const WelcomeScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          } else {
+            return const WelcomeScreen();
+          }
+        },
+      ),
     );
   }
 }

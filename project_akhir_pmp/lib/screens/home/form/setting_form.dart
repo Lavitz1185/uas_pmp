@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_akhir_pmp/screens/opening/signin_screen.dart';
+import 'package:project_akhir_pmp/services/authentication.dart';
 // import 'package:project_akhir_pmp/theme/theme.dart';
 
 class SettingForm extends StatefulWidget {
@@ -36,10 +37,12 @@ class _SettingFormState extends State<SettingForm> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => SigninScreen()),
+              onPressed: () async {
+                await AuthServices().signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const SigninScreen(),
+                  ),
                 );
               },
               child: Row(
