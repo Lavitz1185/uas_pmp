@@ -34,6 +34,8 @@ class ActivityForm extends StatelessWidget {
     // Add more activities here
   ];
 
+  ActivityForm({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

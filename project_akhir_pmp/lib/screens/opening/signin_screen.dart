@@ -4,6 +4,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:project_akhir_pmp/screens/opening/forget_password_screen.dart';
 import 'package:project_akhir_pmp/screens/home/home_screen.dart';
 import 'package:project_akhir_pmp/screens/opening/signup_screen.dart';
+import 'package:project_akhir_pmp/services/authentication.dart';
 import 'package:project_akhir_pmp/theme/theme.dart';
 import 'package:project_akhir_pmp/widgets/custom_scaffold.dart';
 
@@ -18,17 +19,50 @@ class _SigninScreenState extends State<SigninScreen> {
   final _formSignInKey = GlobalKey<FormState>();
   bool rememberPassword = true;
   bool _isPasswordVisible = false;
+  bool isLoading = false;
 
   // Deklarasi controller untuk email dan password
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
-  void dispose() {
+  void despose() {
     // Membersihkan controller
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void loginUsers() async {
+    if (_formSignInKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
+      String res = await AuthServices().loginUser(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      if (res == 'success') {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signup failed: $res')),
+        );
+      }
+    }
   }
 
   @override
@@ -124,6 +158,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               _isPasswordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
+                              color: Colors.black45,
                             ),
                             onPressed: () {
                               setState(() {
@@ -201,14 +236,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                 rememberPassword) {
                               // Memanggil fungsi signIn dengan email dan password dari controller
                               try {
-                                await signIn(emailController.text,
-                                    passwordController.text);
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
+                                loginUsers();
                               } catch (error) {
                                 // Menampilkan pesan kesalahan sesuai dengan jenis kesalahan
                                 if (error is FirebaseAuthException) {

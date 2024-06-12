@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:project_akhir_pmp/screens/opening/signin_screen.dart';
 // import 'package:project_akhir_pmp/theme/theme.dart';
 
-class SettingForm extends StatelessWidget {
+class SettingForm extends StatefulWidget {
+  const SettingForm({super.key});
+
+  @override
+  State<SettingForm> createState() => _SettingFormState();
+}
+
+class _SettingFormState extends State<SettingForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +43,7 @@ class SettingForm extends StatelessWidget {
                 );
               },
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.logout),
                   Text('Log Out'),
