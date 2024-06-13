@@ -51,7 +51,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
-                      // Implementasi untuk mengirim email reset password
+                      _showSnackBar(context, 'Mungkin Next Time :)');
                     },
                     child: const Text('Send Reset Instructions'),
                     style: ElevatedButton.styleFrom(
@@ -59,13 +59,14 @@ class ForgetPasswordScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40.0, vertical: 15.0),
                     ),
                   ),
                   const SizedBox(height: 20.0),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context); // Kembali ke halaman sebelumnya
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       'Back to Login',
@@ -82,5 +83,33 @@ class ForgetPasswordScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+      ),
+      backgroundColor: Colors.black87,
+      elevation: 6.0,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      action: SnackBarAction(
+        label: 'Close',
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

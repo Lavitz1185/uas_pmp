@@ -5,7 +5,7 @@ import 'package:project_akhir_pmp/theme/theme.dart';
 import 'package:project_akhir_pmp/widgets/custom_scaffold.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -13,7 +13,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
-  bool agreePersonalData = true;
+  bool agreePersonalData = false;
   bool _isPasswordVisible = false;
 
   final TextEditingController emailController = TextEditingController();
@@ -31,6 +31,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void signUpUser() async {
     if (_formSignupKey.currentState!.validate()) {
+      if (!agreePersonalData) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text('You must agree to the processing of Personal Data')),
+        );
+        return;
+      }
+
       setState(() {
         isLoading = true;
       });
@@ -103,7 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(
                             height: 40.0,
                           ),
-                          // full name
+                          // Full name
                           TextFormField(
                             controller: nameController,
                             validator: (value) {
@@ -113,20 +122,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               return null;
                             },
                             decoration: InputDecoration(
-                              label: const Text('Full Name'),
+                              labelText: 'Full Name',
                               hintText: 'Enter Full Name',
                               hintStyle: const TextStyle(
                                 color: Colors.black26,
                               ),
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Colors.black12, 
+                                  color: Colors.black12,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Colors.black12, 
+                                  color: Colors.black12,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -135,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(
                             height: 25.0,
                           ),
-                          // email
+                          // Email
                           TextFormField(
                             controller: emailController,
                             validator: (value) {
@@ -145,20 +154,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               return null;
                             },
                             decoration: InputDecoration(
-                              label: const Text('Email'),
+                              labelText: 'Email',
                               hintText: 'Enter Email',
                               hintStyle: const TextStyle(
                                 color: Colors.black26,
                               ),
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Colors.black12, 
+                                  color: Colors.black12,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Colors.black12, 
+                                  color: Colors.black12,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -167,7 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(
                             height: 25.0,
                           ),
-                          // password
+                          // Password
                           TextFormField(
                             controller: passwordController,
                             obscureText: !_isPasswordVisible,
@@ -179,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               return null;
                             },
                             decoration: InputDecoration(
-                              label: const Text('Password'),
+                              labelText: 'Password',
                               hintText: 'Enter Password',
                               hintStyle: const TextStyle(
                                 color: Colors.black26,
@@ -199,13 +208,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Colors.black12, 
+                                  color: Colors.black12,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                  color: Colors.black12, 
+                                  color: Colors.black12,
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),

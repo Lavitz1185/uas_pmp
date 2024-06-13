@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    Provider.of<ThemeNotifier>(context);
 
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),

@@ -31,10 +31,12 @@ class WelcomeScreen extends StatelessWidget {
                             fontWeight: FontWeight.w900,
                             color: Color.fromARGB(255, 254, 244, 255))),
                     TextSpan(
-                        text: '\nsilahkan otak atik semaumu hehehe...',
+                        text:
+                            'Jadikan Harimu Lebih Teratur dan Produktif Bersama Kami!',
                         style: TextStyle(
                             fontSize: 20,
-                            color: Color.fromARGB(221, 32, 32, 32))),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
                   ]),
                 )),
               )),
