@@ -49,4 +49,6 @@ class AuthServices {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  getUserInfo(String uid) {}
 }

@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeForm(),
     ActivityForm(),
     FavoriteForm(),
-    SettingForm(),
+    SettingForm(), // Now this will use Navigator to push UserProfileForm
   ];
 
   @override

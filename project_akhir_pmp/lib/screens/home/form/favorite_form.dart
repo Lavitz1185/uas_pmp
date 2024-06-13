@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Untuk format tanggal
-import 'package:cloud_firestore/cloud_firestore.dart'; // Untuk mengakses Firestore
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_akhir_pmp/screens/home/form/activity/activity.dart';
 
 class FavoriteForm extends StatefulWidget {
@@ -12,6 +12,7 @@ class FavoriteForm extends StatefulWidget {
 
 class _FavoriteFormState extends State<FavoriteForm> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool _sortAscending = true; // Flag for sorting order
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +49,10 @@ class _FavoriteFormState extends State<FavoriteForm> {
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
-        ),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore
-            .collection('activities')
-            .where('favorite',
-                isEqualTo: true) // Filter activities marked as favorite
-            .snapshots(),
+        ),        
+      ),      
+      body: StreamBuilder<List<Activity>>(
+        stream: _getActivities(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -63,24 +60,14 @@ class _FavoriteFormState extends State<FavoriteForm> {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No favorite activities found.'));
           }
 
           return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
+            itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              final doc = snapshot.data!.docs[index];
-              final data = doc.data() as Map<String, dynamic>;
-              final activity = Activity(
-                id: doc.id,
-                title: data['title'],
-                description: data['description'],
-                timestamp: (data['timestamp'] as Timestamp).toDate(),
-                backgroundColor: Color(data['backgroundColor']),
-                pinned: data['pinned'] ?? false,
-                favorite: data['favorite'] ?? false,
-              );
+              final activity = snapshot.data![index];
 
               return Card(
                 margin:
@@ -102,6 +89,14 @@ class _FavoriteFormState extends State<FavoriteForm> {
                           Icons.push_pin,
                           color: Colors.red,
                         ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      if (activity.deadline != null)
+                        Icon(
+                          Icons.schedule,
+                          color: Colors.grey,
+                        ),
                     ],
                   ),
                   subtitle: Column(
@@ -114,18 +109,17 @@ class _FavoriteFormState extends State<FavoriteForm> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4.0),
+                      SizedBox(width: 4),
                       Text(
                         DateFormat.yMMMd().add_jm().format(activity.timestamp),
-                        style: const TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.black38),
                       ),
                     ],
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons
-                        .remove_circle), // Ganti dengan icon favorit jika perlu
+                    icon: Icon(Icons.remove_circle),
                     onPressed: () {
-                      _removeFromFavorites(
-                          activity); // Implement method to remove from favorites
+                      _removeFromFavorites(activity);
                     },
                   ),
                 ),
@@ -137,18 +131,35 @@ class _FavoriteFormState extends State<FavoriteForm> {
     );
   }
 
-  // Method to remove activity from favorites
+  Stream<List<Activity>> _getActivities() {
+    return _firestore
+        .collection('activities')
+        .where('favorite', isEqualTo: true)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Activity.fromFirestore(doc)).toList())
+        .map((activities) {
+      activities.sort((a, b) {
+        if (_sortAscending) {
+          return a.title.compareTo(b.title);
+        } else {
+          return b.title.compareTo(a.title);
+        }
+      });
+      return activities;
+    });
+  }
+
   void _removeFromFavorites(Activity activity) async {
     try {
       await _firestore.collection('activities').doc(activity.id).update({
-        'favorite': false, // Set favorite to false to remove from favorites
+        'favorite': false,
       });
     } catch (e) {
       print('Error removing from favorites: $e');
     }
   }
 
-  // Method to show activity details (similar to ActivityForm)
   void _showActivityDetails(Activity activity) {
     showDialog(
       context: context,
@@ -164,10 +175,36 @@ class _FavoriteFormState extends State<FavoriteForm> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 16),
-              Text(
-                'Timestamp: ${DateFormat.yMMMd().add_jm().format(activity.timestamp)}',
-                style: TextStyle(color: Colors.grey),
+              Row(
+                children: [
+                  Icon(
+                    Icons.access_time,
+                    size: 16,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    'Timestamp: ${DateFormat.yMMMd().add_jm().format(activity.timestamp)}',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
               ),
+              SizedBox(height: 8),
+              if (activity.deadline != null) // Check if activity has a deadline
+                Row(
+                  children: [
+                    Icon(
+                      Icons.timer,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      'Deadline: ${DateFormat.yMMMd().format(activity.deadline!)}',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
             ],
           ),
           actions: [

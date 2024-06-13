@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project_akhir_pmp/screens/home/form/settings/user_profile_form.dart';
 import 'package:project_akhir_pmp/screens/home/home_screen.dart';
 
 class HomeForm extends StatelessWidget {
-  const HomeForm({Key? key}) : super(key: key);
+  HomeForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,11 @@ class HomeForm extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: buildProfileCard(),
+                  child: buildProfileCard(context),
                 ),
                 SizedBox(width: 20),
                 Expanded(
-                  child: buildNotificationsCard(context),
+                  child: buildFavoritesCard(context),
                 ),
               ],
             ),
@@ -78,10 +80,15 @@ class HomeForm extends StatelessWidget {
     );
   }
 
-  Widget buildProfileCard() {
+  Widget buildProfileCard(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Implement navigation to profile page
+      onTap: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserProfileForm(),
+          ),
+        );
       },
       child: Container(
         height: 150,
@@ -111,9 +118,18 @@ class HomeForm extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            Text(
-              'View and edit your profile',
-              style: TextStyle(color: Colors.white),
+            FutureBuilder(
+              future: _getCurrentUserInfo(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Text(
+                    'Hi, ${_fullNameController.text}!',
+                    style: TextStyle(color: Colors.white70, fontSize: 25),
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -121,7 +137,7 @@ class HomeForm extends StatelessWidget {
     );
   }
 
-  Widget buildNotificationsCard(BuildContext context) {
+  Widget buildFavoritesCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
         // Navigate to HomeScreen with index 2 (Favorites)
@@ -159,26 +175,9 @@ class HomeForm extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('favorites')
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading...');
-                }
-
-                if (snapshot.hasError) {
-                  return Text('Failed to load favorites: ${snapshot.error}');
-                }
-
-                int numberOfFavorites = snapshot.data!.docs.length;
-
-                return Text(
-                  'View your recent favorites ($numberOfFavorites)',
-                  style: TextStyle(color: Colors.white),
-                );
-              },
+            Text(
+              'View your recent favorites',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
@@ -295,5 +294,18 @@ class HomeForm extends StatelessWidget {
         );
       },
     );
+  }
+
+  TextEditingController _fullNameController = TextEditingController();
+
+  Future<void> _getCurrentUserInfo() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userInfo = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      _fullNameController.text = userInfo['name'];
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_akhir_pmp/screens/home/form/settings/change_theme.dart';
+import 'package:project_akhir_pmp/screens/home/form/settings/user_profile_form.dart';
 import 'package:project_akhir_pmp/screens/opening/signin_screen.dart';
 import 'package:project_akhir_pmp/services/authentication.dart';
 
@@ -11,6 +12,19 @@ class SettingForm extends StatefulWidget {
 }
 
 class _SettingFormState extends State<SettingForm> {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (routeSettings) {
+        return MaterialPageRoute(
+          builder: (context) => SettingsHome(),
+        );
+      },
+    );
+  }
+}
+
+class SettingsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +70,12 @@ class _SettingFormState extends State<SettingForm> {
             // User Profile Box
             GestureDetector(
               onTap: () {
-                // Implement navigation to profile page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserProfileForm(),
+                  ),
+                );
               },
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 8.0),
