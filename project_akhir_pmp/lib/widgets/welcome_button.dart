@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:project_akhir_pmp/screens/signup_screen.dart';
 
 class WelcomeButton extends StatelessWidget {
   const WelcomeButton({super.key, this.buttonText, this.onTap, this.color, this.textColor});

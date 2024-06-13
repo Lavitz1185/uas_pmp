@@ -9,8 +9,8 @@ class Activity {
   final Color backgroundColor;
   bool pinned;
   bool favorite;
-  DateTime? deadline; // New field for deadline
-  bool completed; // New field for completion status
+  DateTime? deadline; 
+  bool completed; 
 
   Activity({
     required this.id,
