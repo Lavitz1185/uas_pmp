@@ -209,8 +209,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgetPasswordScreen(),
+                                  builder: (context) => ForgetPasswordScreen(),
                                 ),
                               );
                             },
@@ -233,11 +232,9 @@ class _SigninScreenState extends State<SigninScreen> {
                           onPressed: () async {
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
-                              // Memanggil fungsi signIn dengan email dan password dari controller
                               try {
                                 loginUsers();
                               } catch (error) {
-                                // Menampilkan pesan kesalahan sesuai dengan jenis kesalahan
                                 if (error is FirebaseAuthException) {
                                   if (error.code == 'user-not-found') {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -275,7 +272,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               );
                             }
                           },
-                          child: const Text('Sign In'),
+                          child: const Text('Login'),
                         ),
                       ),
                       const SizedBox(
@@ -324,16 +321,13 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 }
 
-// Fungsi untuk melakukan sign in
 Future<void> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-    // Jika berhasil, lanjutkan ke halaman selanjutnya atau tampilkan pesan sukses
   } catch (error) {
-    // Handle error
     print('Sign in error: $error');
   }
 }

@@ -12,7 +12,7 @@ class HomeForm extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.blueAccent,
@@ -25,13 +25,13 @@ class HomeForm extends StatelessWidget {
                 color: Colors.grey.withOpacity(1),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: AppBar(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               'Home',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -49,26 +49,24 @@ class HomeForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Row for Profile and Notifications cards
             Row(
               children: [
                 Expanded(
                   child: buildProfileCard(context),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: buildFavoritesCard(context),
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            // Row for Settings and Recent Activities cards
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: buildSettingsCard(context),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: buildRecentActivitiesCard(context),
                 ),
@@ -80,37 +78,38 @@ class HomeForm extends StatelessWidget {
     );
   }
 
+  //profile card
   Widget buildProfileCard(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => UserProfileForm(),
+            builder: (context) => const UserProfileForm(),
           ),
         );
       },
       child: Container(
         height: 150,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 73, 165, 240),
+          color: const Color.fromARGB(255, 73, 165, 240),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.7),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.person, color: Colors.white),
-            SizedBox(height: 16),
-            Text(
+            const Icon(Icons.person, color: Colors.white),
+            const SizedBox(height: 16),
+            const Text(
               'User Profile',
               style: TextStyle(
                 fontSize: 18,
@@ -122,11 +121,11 @@ class HomeForm extends StatelessWidget {
               future: _getCurrentUserInfo(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else {
                   return Text(
                     'Hi, ${_fullNameController.text}!',
-                    style: TextStyle(color: Colors.white70, fontSize: 25),
+                    style: const TextStyle(color: Colors.white70, fontSize: 25),
                   );
                 }
               },
@@ -137,32 +136,32 @@ class HomeForm extends StatelessWidget {
     );
   }
 
+  //favorites card
   Widget buildFavoritesCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to HomeScreen with index 2 (Favorites)
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => HomeScreen(initialIndex: 2),
+            builder: (context) => const HomeScreen(initialIndex: 2),
           ),
         );
       },
       child: Container(
         height: 150,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 248, 177, 70),
+          color: const Color.fromARGB(255, 248, 177, 70),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.7),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.star, color: Colors.white),
@@ -185,32 +184,32 @@ class HomeForm extends StatelessWidget {
     );
   }
 
+  //settings card
   Widget buildSettingsCard(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to HomeScreen with index 3 (Settings)
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => HomeScreen(initialIndex: 3),
+            builder: (context) => const HomeScreen(initialIndex: 3),
           ),
         );
       },
       child: Container(
         height: 150,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 253, 104, 154),
+          color: const Color.fromARGB(255, 253, 104, 154),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.7),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Column(
+        child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.settings, color: Colors.white),
@@ -233,12 +232,13 @@ class HomeForm extends StatelessWidget {
     );
   }
 
+  //recent activities card
   Widget buildRecentActivitiesCard(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('activities').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
         if (snapshot.hasError) {
@@ -249,34 +249,33 @@ class HomeForm extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-            // Navigate to HomeScreen with index 1 (Activities)
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => HomeScreen(initialIndex: 1),
+                builder: (context) => const HomeScreen(initialIndex: 1),
               ),
             );
           },
           child: Container(
             height: 150,
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 248, 88, 227),
+              color: const Color.fromARGB(255, 248, 88, 227),
               borderRadius: BorderRadius.circular(8.0),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.7),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.history, color: Colors.white),
-                SizedBox(height: 16),
-                Text(
+                const Icon(Icons.history, color: Colors.white),
+                const SizedBox(height: 16),
+                const Text(
                   'Recent Activities',
                   style: TextStyle(
                     fontSize: 18,
@@ -286,7 +285,7 @@ class HomeForm extends StatelessWidget {
                 ),
                 Text(
                   'Check your recent activities ($numberOfActivities)',
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ],
             ),
@@ -296,7 +295,7 @@ class HomeForm extends StatelessWidget {
     );
   }
 
-  TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
 
   Future<void> _getCurrentUserInfo() async {
     User? user = FirebaseAuth.instance.currentUser;

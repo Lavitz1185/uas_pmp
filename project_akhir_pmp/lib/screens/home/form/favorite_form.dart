@@ -12,14 +12,14 @@ class FavoriteForm extends StatefulWidget {
 
 class _FavoriteFormState extends State<FavoriteForm> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _sortAscending = true; // Flag for sorting order
+  bool _sortAscending = true; 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.blueAccent,
@@ -32,13 +32,13 @@ class _FavoriteFormState extends State<FavoriteForm> {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: AppBar(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               'Favorite Activities',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -55,13 +55,13 @@ class _FavoriteFormState extends State<FavoriteForm> {
         stream: _getActivities(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No favorite activities found.'));
+            return const Center(child: Text('No favorite activities found.'));
           }
 
           return ListView.builder(
@@ -85,7 +85,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
                         ),
                       ),
                       if (activity.pinned)
-                        Icon(
+                        const Icon(
                           Icons.push_pin,
                           color: Colors.red,
                         ),
@@ -93,7 +93,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
                         width: 4,
                       ),
                       if (activity.deadline != null)
-                        Icon(
+                        const Icon(
                           Icons.schedule,
                           color: Colors.grey,
                         ),
@@ -109,7 +109,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4.0),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         DateFormat.yMMMd().add_jm().format(activity.timestamp),
                         style: const TextStyle(color: Colors.black38),
@@ -117,7 +117,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
                     ],
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.remove_circle),
+                    icon: const Icon(Icons.remove_circle),
                     onPressed: () {
                       _removeFromFavorites(activity);
                     },
@@ -173,36 +173,36 @@ class _FavoriteFormState extends State<FavoriteForm> {
             children: [
               Text(
                 activity.description,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.access_time,
                     size: 16,
                     color: Colors.grey,
                   ),
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Text(
                     'Timestamp: ${DateFormat.yMMMd().add_jm().format(activity.timestamp)}',
-                    style: TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              if (activity.deadline != null) // Check if activity has a deadline
+              const SizedBox(height: 8),
+              if (activity.deadline != null) 
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.timer,
                       size: 16,
                       color: Colors.grey,
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
                       'Deadline: ${DateFormat.yMMMd().format(activity.deadline!)}',
-                      style: TextStyle(color: Colors.grey),
+                      style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
@@ -213,7 +213,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
           ],
         );
@@ -225,7 +225,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
     final snackBar = SnackBar(
       content: Text(
         message,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 16.0,
         ),
@@ -233,7 +233,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
       backgroundColor: Colors.black87,
       elevation: 6.0,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

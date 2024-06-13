@@ -15,7 +15,7 @@ class _ActivityFormState extends State<ActivityForm> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _searchQuery = '';
   bool _sortAscending = true;
-  Color _selectedBackgroundColor = Color.fromARGB(255, 215, 215, 215);
+  Color _selectedBackgroundColor = const Color.fromARGB(255, 215, 215, 215);
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   bool _showDeadline = false;
@@ -73,9 +73,8 @@ class _ActivityFormState extends State<ActivityForm> {
     _selectedTime =
         activity != null ? TimeOfDay.fromDateTime(activity.timestamp) : null;
     _selectedDeadline = activity?.deadline;
-    String? _errorMessage; // Variable untuk menyimpan pesan kesalahan
+    String? _errorMessage;
 
-    // Show modal bottom sheet
     final result = await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -112,7 +111,7 @@ class _ActivityFormState extends State<ActivityForm> {
                         const SizedBox(height: 16.0),
                         Row(
                           children: [
-                            Text('Select Background Color:'),
+                            const Text('Select Background Color:'),
                             const SizedBox(width: 8.0),
                             GestureDetector(
                               onTap: () async {
@@ -120,7 +119,8 @@ class _ActivityFormState extends State<ActivityForm> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('Select Background Color'),
+                                      title:
+                                          const Text('Select Background Color'),
                                       content: SingleChildScrollView(
                                         child: BlockPicker(
                                           pickerColor: _selectedBackgroundColor,
@@ -161,8 +161,7 @@ class _ActivityFormState extends State<ActivityForm> {
                                 if (pickedDate != null) {
                                   setState(() {
                                     _selectedDate = pickedDate;
-                                    _errorMessage =
-                                        null; // Reset error message on valid date selection
+                                    _errorMessage = null;
                                   });
                                 } else {
                                   setState(() {
@@ -187,8 +186,7 @@ class _ActivityFormState extends State<ActivityForm> {
                                 if (pickedTime != null) {
                                   setState(() {
                                     _selectedTime = pickedTime;
-                                    _errorMessage =
-                                        null; // Reset error message on valid time selection
+                                    _errorMessage = null;
                                   });
                                 } else {
                                   setState(() {
@@ -216,14 +214,13 @@ class _ActivityFormState extends State<ActivityForm> {
                                     setState(() {
                                       _showDeadline = value;
                                       if (!_showDeadline) {
-                                        _selectedDeadline =
-                                            null; // Reset deadline when switch is turned off
+                                        _selectedDeadline = null;
                                       }
                                     });
                                   },
                                 ),
                                 const SizedBox(width: 8),
-                                Text('Set Deadline'),
+                                const Text('Set Deadline'),
                               ],
                             ),
                             const SizedBox(height: 10.0),
@@ -232,7 +229,7 @@ class _ActivityFormState extends State<ActivityForm> {
                                 children: [
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFFFD2F2F),
+                                      backgroundColor: const Color(0xFFFD2F2F),
                                     ),
                                     onPressed: () async {
                                       final pickedDeadline =
@@ -260,7 +257,7 @@ class _ActivityFormState extends State<ActivityForm> {
                                   const SizedBox(width: 16),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFFFD2F2F),
+                                      backgroundColor: const Color(0xFFFD2F2F),
                                     ),
                                     onPressed: () async {
                                       final pickedTime = await showTimePicker(
@@ -316,21 +313,20 @@ class _ActivityFormState extends State<ActivityForm> {
                         if (_errorMessage != null)
                           Text(
                             _errorMessage!,
-                            style: TextStyle(color: Colors.red),
+                            style: const TextStyle(color: Colors.red),
                           ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pop(false); // Close modal without saving
+                                Navigator.of(context).pop(false);
                               },
                               child: const Text('Cancel'),
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                // Validate inputs
+                                // Validasi
                                 if (_titleController.text.trim().isEmpty ||
                                     _descriptionController.text
                                         .trim()
@@ -412,8 +408,7 @@ class _ActivityFormState extends State<ActivityForm> {
                                   );
                                   _editActivity(updatedActivity);
                                 }
-                                Navigator.of(context)
-                                    .pop(true); // Close modal and save
+                                Navigator.of(context).pop(true);
                               },
                               child: Text(activity == null ? 'Add' : 'Update'),
                             ),
@@ -490,45 +485,46 @@ class _ActivityFormState extends State<ActivityForm> {
               backgroundColor: Colors.white,
               elevation: 4.0,
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       activity.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Text(
                       activity.description,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
-                    SizedBox(height: 16),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.access_time, color: Colors.grey, size: 20),
-                        SizedBox(width: 8),
+                        const Icon(Icons.access_time,
+                            color: Colors.grey, size: 20),
+                        const SizedBox(width: 8),
                         Text(
                           'Timestamp: ${DateFormat.yMMMd().add_jm().format(activity.timestamp)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     if (activity.deadline != null) ...[
                       Row(
                         children: [
-                          Icon(Icons.timer, color: Colors.grey, size: 20),
-                          SizedBox(width: 8),
+                          const Icon(Icons.timer, color: Colors.grey, size: 20),
+                          const SizedBox(width: 8),
                           Text(
                             'Deadline: ${DateFormat.yMMMd().add_Hm().format(activity.deadline!)}',
                             style: TextStyle(
@@ -537,7 +533,7 @@ class _ActivityFormState extends State<ActivityForm> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Checkbox(
@@ -560,7 +556,7 @@ class _ActivityFormState extends State<ActivityForm> {
                               _editActivity(updatedActivity);
                             },
                           ),
-                          Text(
+                          const Text(
                             'Mark as Completed',
                             style: TextStyle(
                               fontSize: 16,
@@ -569,14 +565,14 @@ class _ActivityFormState extends State<ActivityForm> {
                         ],
                       ),
                     ],
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(
+                        child: const Text(
                           'Close',
                           style: TextStyle(
                             color: Colors.blue,
@@ -600,12 +596,11 @@ class _ActivityFormState extends State<ActivityForm> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(
-            kToolbarHeight + 70), // Increased height to accommodate search bar
+        preferredSize: const Size.fromHeight(kToolbarHeight + 70),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(0.0),
               bottomRight: Radius.circular(0.0),
             ),
@@ -614,7 +609,7 @@ class _ActivityFormState extends State<ActivityForm> {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -638,7 +633,7 @@ class _ActivityFormState extends State<ActivityForm> {
                         hintText: 'Search activities...',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30)),
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: const Icon(Icons.search),
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -655,15 +650,16 @@ class _ActivityFormState extends State<ActivityForm> {
                         _sortAscending = newValue!;
                       });
                     },
-                    icon: Icon(Icons.arrow_drop_down, color: Colors.black),
+                    icon:
+                        const Icon(Icons.arrow_drop_down, color: Colors.black),
                     iconSize: 24,
                     elevation: 16,
-                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    style: const TextStyle(color: Colors.black, fontSize: 16),
                     underline: Container(
                       height: 2,
                       color: Colors.black,
                     ),
-                    items: [
+                    items: const [
                       DropdownMenuItem(
                         value: true,
                         child: Text('A-Z'),
@@ -684,13 +680,13 @@ class _ActivityFormState extends State<ActivityForm> {
         stream: _getActivities(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No activities found.'));
+            return const Center(child: Text('No activities found.'));
           }
 
           final activities = _filterActivities(snapshot.data!);
@@ -705,8 +701,7 @@ class _ActivityFormState extends State<ActivityForm> {
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 color: activity.backgroundColor,
                 child: ListTile(
-                  onTap: () =>
-                      _showActivityDetails(activity), // Show details on tap
+                  onTap: () => _showActivityDetails(activity),
                   title: Row(
                     children: [
                       Expanded(
@@ -717,22 +712,22 @@ class _ActivityFormState extends State<ActivityForm> {
                         ),
                       ),
                       if (activity.pinned)
-                        Icon(
+                        const Icon(
                           Icons.push_pin,
                           color: Colors.red,
                         ),
                       if (activity.favorite)
-                        Icon(
+                        const Icon(
                           Icons.star,
                           color: Colors.yellow,
                         ),
                       if (activity.deadline != null && !activity.completed)
-                        Icon(
+                        const Icon(
                           Icons.schedule,
                           color: Colors.red,
                         ),
                       if (activity.deadline != null && activity.completed)
-                        Icon(
+                        const Icon(
                           Icons.schedule,
                           color: Colors.grey,
                         ),
@@ -769,11 +764,11 @@ class _ActivityFormState extends State<ActivityForm> {
                       }
                     },
                     itemBuilder: (BuildContext context) => [
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'delete',
                         child: Text('Delete'),
                       ),
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'edit',
                         child: Text('Edit'),
                       ),
@@ -805,7 +800,7 @@ class _ActivityFormState extends State<ActivityForm> {
     final snackBar = SnackBar(
       content: Text(
         message,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 16.0,
         ),
@@ -813,7 +808,7 @@ class _ActivityFormState extends State<ActivityForm> {
       backgroundColor: Colors.black87,
       elevation: 6.0,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

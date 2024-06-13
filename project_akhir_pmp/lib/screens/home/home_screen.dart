@@ -21,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomeForm(),
     ActivityForm(),
-    FavoriteForm(),
-    SettingForm(), // Now this will use Navigator to push UserProfileForm
+    const FavoriteForm(),
+    const SettingForm(), // Now this will use Navigator to push UserProfileForm
   ];
 
   @override

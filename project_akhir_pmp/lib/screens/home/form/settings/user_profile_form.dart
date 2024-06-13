@@ -40,7 +40,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
   void _toggleEditMode() {
     setState(() {
       _isEditMode = !_isEditMode;
-      _obscurePassword = !_isEditMode; // Show password when in edit mode
+      _obscurePassword = !_isEditMode; 
     });
   }
 
@@ -67,17 +67,17 @@ class _UserProfileFormState extends State<UserProfileForm> {
         _emailController.text.trim().isEmpty ||
         _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Semua kolom harus diisi')),
+        const SnackBar(content: Text('Semua kolom harus diisi')),
       );
       return false;
     } else if (!_isValidEmail(_emailController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Format email tidak valid')),
+        const SnackBar(content: Text('Format email tidak valid')),
       );
       return false;
     } else if (_passwordController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password harus minimal 6 karakter')),
+        const SnackBar(content: Text('Password harus minimal 6 karakter')),
       );
       return false;
     }
@@ -85,7 +85,6 @@ class _UserProfileFormState extends State<UserProfileForm> {
   }
 
   bool _isValidEmail(String email) {
-    // Simple email validation using RegExp
     String emailRegex = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     return RegExp(emailRegex).hasMatch(email);
   }
@@ -101,7 +100,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.blueAccent,
@@ -114,7 +113,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
                 color: Colors.grey.withOpacity(1),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -131,7 +130,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
             automaticallyImplyLeading: false,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -143,7 +142,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
         future: _userInfoFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -153,7 +152,6 @@ class _UserProfileFormState extends State<UserProfileForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Avatar and Header
                     Center(
                       child: Column(
                         children: [
@@ -166,7 +164,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
                               color: Colors.grey[600],
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Text(
                             _fullNameController.text,
                             style: const TextStyle(
@@ -174,7 +172,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             _emailController.text,
                             style: TextStyle(
@@ -185,40 +183,38 @@ class _UserProfileFormState extends State<UserProfileForm> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 24),
-
-                    // Form Fields
+                    const SizedBox(height: 24),
                     TextFormField(
                       controller: _fullNameController,
-                      readOnly: !_isEditMode, // Make it editable
+                      readOnly: !_isEditMode, 
                       decoration: InputDecoration(
                         labelText: 'Full Name',
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: const Icon(Icons.person),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
-                      readOnly: !_isEditMode, // Make it editable
+                      readOnly: !_isEditMode, 
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        prefixIcon: Icon(Icons.email),
+                        prefixIcon: const Icon(Icons.email),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      readOnly: !_isEditMode, // Make it editable
+                      readOnly: !_isEditMode, 
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock),
+                        prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
@@ -236,9 +232,8 @@ class _UserProfileFormState extends State<UserProfileForm> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                    // Update Button
                     if (_isEditMode)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -247,10 +242,10 @@ class _UserProfileFormState extends State<UserProfileForm> {
                             onPressed: () {
                               _cancelEdit();
                             },
-                            child: Text('Cancel'),
+                            child: const Text('Cancel'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
-                              padding: EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -260,10 +255,10 @@ class _UserProfileFormState extends State<UserProfileForm> {
                             onPressed: () {
                               _saveProfileChanges();
                             },
-                            child: Text('Save'),
+                            child: const Text('Save'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
-                              padding: EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -276,10 +271,10 @@ class _UserProfileFormState extends State<UserProfileForm> {
                         onPressed: () {
                           _toggleEditMode();
                         },
-                        child: Text('Kelola Profile'),
+                        child: const Text('Kelola Profile'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -307,7 +302,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
     final snackBar = SnackBar(
       content: Text(
         message,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 16.0,
         ),
@@ -315,7 +310,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
       backgroundColor: Colors.black87,
       elevation: 6.0,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

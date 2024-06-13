@@ -30,7 +30,7 @@ class SettingsHome extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.blueAccent,
@@ -43,7 +43,7 @@ class SettingsHome extends StatelessWidget {
                 color: Colors.grey.withOpacity(1),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -67,19 +67,19 @@ class SettingsHome extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // User Profile Box
+            // User Profile 
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserProfileForm(),
+                    builder: (context) => const UserProfileForm(),
                   ),
                 );
               },
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0),
-                padding: EdgeInsets.all(16.0),
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
@@ -88,14 +88,14 @@ class SettingsHome extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
                 child: Row(
                   children: [
                     Icon(Icons.person, color: Theme.of(context).primaryColor),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     const Text(
                       'User Profile',
                       style:
@@ -106,7 +106,7 @@ class SettingsHome extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8.0),
@@ -115,7 +115,7 @@ class SettingsHome extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.3),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -125,7 +125,7 @@ class SettingsHome extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 235, 44, 30),
+                backgroundColor: const Color.fromARGB(255, 235, 44, 30),
               ),
               onPressed: () async {
                 await AuthServices().signOut();
