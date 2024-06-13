@@ -49,8 +49,8 @@ class _FavoriteFormState extends State<FavoriteForm> {
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
-        ),        
-      ),      
+        ),
+      ),
       body: StreamBuilder<List<Activity>>(
         stream: _getActivities(),
         builder: (context, snapshot) {
@@ -155,6 +155,7 @@ class _FavoriteFormState extends State<FavoriteForm> {
       await _firestore.collection('activities').doc(activity.id).update({
         'favorite': false,
       });
+      _showSnackBar(context, 'Activity Unfavorited');
     } catch (e) {
       print('Error removing from favorites: $e');
     }
@@ -218,5 +219,33 @@ class _FavoriteFormState extends State<FavoriteForm> {
         );
       },
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+      ),
+      backgroundColor: Colors.black87,
+      elevation: 6.0,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      action: SnackBarAction(
+        label: 'Close',
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

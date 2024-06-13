@@ -3,16 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProfileForm extends StatefulWidget {
-  const UserProfileForm({super.key});
+  const UserProfileForm({Key? key}) : super(key: key);
 
   @override
   State<UserProfileForm> createState() => _UserProfileFormState();
 }
 
 class _UserProfileFormState extends State<UserProfileForm> {
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   late Future<void> _userInfoFuture;
   bool _isEditMode = false;
@@ -45,18 +45,49 @@ class _UserProfileFormState extends State<UserProfileForm> {
   }
 
   void _saveProfileChanges() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .update({
-        'name': _fullNameController.text,
-        'email': _emailController.text,
-        'password': _passwordController.text,
-      });
+    if (_validateInputs()) {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({
+          'name': _fullNameController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        });
+        _showSnackBar(context, 'Profile Updated');
+      }
+      _toggleEditMode();
     }
-    _toggleEditMode();
+  }
+
+  bool _validateInputs() {
+    if (_fullNameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Semua kolom harus diisi')),
+      );
+      return false;
+    } else if (!_isValidEmail(_emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Format email tidak valid')),
+      );
+      return false;
+    } else if (_passwordController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Password harus minimal 6 karakter')),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  bool _isValidEmail(String email) {
+    // Simple email validation using RegExp
+    String emailRegex = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    return RegExp(emailRegex).hasMatch(email);
   }
 
   void _cancelEdit() {
@@ -89,7 +120,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
           ),
           child: AppBar(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               'User Profile',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -138,7 +169,7 @@ class _UserProfileFormState extends State<UserProfileForm> {
                           SizedBox(height: 16),
                           Text(
                             _fullNameController.text,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
@@ -188,6 +219,18 @@ class _UserProfileFormState extends State<UserProfileForm> {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         prefixIcon: Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -258,5 +301,33 @@ class _UserProfileFormState extends State<UserProfileForm> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+      ),
+      backgroundColor: Colors.black87,
+      elevation: 6.0,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      action: SnackBarAction(
+        label: 'Close',
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

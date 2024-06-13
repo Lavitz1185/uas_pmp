@@ -19,7 +19,7 @@ class ChangeTheme extends StatelessWidget {
 
     return ListTile(
       leading: Icon(Icons.brightness_6, color: Theme.of(context).primaryColor),
-      title: Text(
+      title: const Text(
         'Change Theme',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),

@@ -49,7 +49,7 @@ class SettingsHome extends StatelessWidget {
           ),
           child: AppBar(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               'Settings',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class SettingsHome extends StatelessWidget {
                   children: [
                     Icon(Icons.person, color: Theme.of(context).primaryColor),
                     SizedBox(width: 16),
-                    Text(
+                    const Text(
                       'User Profile',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -122,7 +122,7 @@ class SettingsHome extends StatelessWidget {
               child: ChangeTheme(),
             ),
             // Theme Box
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 235, 44, 30),
@@ -135,7 +135,7 @@ class SettingsHome extends StatelessWidget {
                   ),
                 );
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.logout),

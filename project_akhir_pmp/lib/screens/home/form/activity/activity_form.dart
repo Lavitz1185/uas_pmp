@@ -63,6 +63,7 @@ class _ActivityFormState extends State<ActivityForm> {
     await updatedActivity.updateInFirestore();
   }
 
+  //tambah activity
   void _showAddActivityModalSheet(BuildContext context,
       [Activity? activity]) async {
     final _titleController = TextEditingController(text: activity?.title ?? '');
@@ -72,6 +73,7 @@ class _ActivityFormState extends State<ActivityForm> {
     _selectedTime =
         activity != null ? TimeOfDay.fromDateTime(activity.timestamp) : null;
     _selectedDeadline = activity?.deadline;
+    String? _errorMessage; // Variable untuk menyimpan pesan kesalahan
 
     // Show modal bottom sheet
     final result = await showModalBottomSheet(
@@ -82,8 +84,7 @@ class _ActivityFormState extends State<ActivityForm> {
           builder: (BuildContext context, StateSetter setState) {
             return Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Wrap(
                 children: [
                   Padding(
@@ -93,7 +94,7 @@ class _ActivityFormState extends State<ActivityForm> {
                       children: [
                         Text(
                           activity == null ? 'Add Activity' : 'Edit Activity',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -160,6 +161,12 @@ class _ActivityFormState extends State<ActivityForm> {
                                 if (pickedDate != null) {
                                   setState(() {
                                     _selectedDate = pickedDate;
+                                    _errorMessage =
+                                        null; // Reset error message on valid date selection
+                                  });
+                                } else {
+                                  setState(() {
+                                    _errorMessage = 'Please select a date.';
                                   });
                                 }
                               },
@@ -180,6 +187,12 @@ class _ActivityFormState extends State<ActivityForm> {
                                 if (pickedTime != null) {
                                   setState(() {
                                     _selectedTime = pickedTime;
+                                    _errorMessage =
+                                        null; // Reset error message on valid time selection
+                                  });
+                                } else {
+                                  setState(() {
+                                    _errorMessage = 'Please select a time.';
                                   });
                                 }
                               },
@@ -219,7 +232,8 @@ class _ActivityFormState extends State<ActivityForm> {
                                 children: [
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: Color(0xFFFD2F2F)),
+                                      backgroundColor: Color(0xFFFD2F2F),
+                                    ),
                                     onPressed: () async {
                                       final pickedDeadline =
                                           await showDatePicker(
@@ -246,7 +260,8 @@ class _ActivityFormState extends State<ActivityForm> {
                                   const SizedBox(width: 16),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: Color(0xFFFD2F2F)),
+                                      backgroundColor: Color(0xFFFD2F2F),
+                                    ),
                                     onPressed: () async {
                                       final pickedTime = await showTimePicker(
                                         context: context,
@@ -277,10 +292,32 @@ class _ActivityFormState extends State<ActivityForm> {
                                   ),
                                 ],
                               ),
+                              if (_selectedDeadline != null &&
+                                  (_selectedDeadline!
+                                          .isBefore(_selectedDate!) ||
+                                      _selectedDeadline!.isAtSameMomentAs(
+                                          DateTime(
+                                              _selectedDate!.year,
+                                              _selectedDate!.month,
+                                              _selectedDate!.day,
+                                              _selectedTime!.hour,
+                                              _selectedTime!.minute)) ||
+                                      _selectedDeadline!.isBefore(DateTime(
+                                          _selectedDate!.year,
+                                          _selectedDate!.month,
+                                          _selectedDate!.day,
+                                          _selectedTime!.hour,
+                                          _selectedTime!.minute))))
+                                ...[]
                             ],
                           ],
                         ),
                         const SizedBox(height: 16.0),
+                        if (_errorMessage != null)
+                          Text(
+                            _errorMessage!,
+                            style: TextStyle(color: Colors.red),
+                          ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -293,51 +330,90 @@ class _ActivityFormState extends State<ActivityForm> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                if (_titleController.text.isNotEmpty &&
-                                    _descriptionController.text.isNotEmpty &&
-                                    _selectedDate != null &&
-                                    _selectedTime != null) {
-                                  final dateTime = DateTime(
-                                    _selectedDate!.year,
-                                    _selectedDate!.month,
-                                    _selectedDate!.day,
-                                    _selectedTime!.hour,
-                                    _selectedTime!.minute,
-                                  );
-                                  final newActivity = Activity(
-                                    id: '',
+                                // Validate inputs
+                                if (_titleController.text.trim().isEmpty ||
+                                    _descriptionController.text
+                                        .trim()
+                                        .isEmpty) {
+                                  setState(() {
+                                    _errorMessage = 'Semua field harus diisi.';
+                                  });
+                                  return;
+                                }
+
+                                if (_selectedDate == null ||
+                                    _selectedTime == null) {
+                                  setState(() {
+                                    _errorMessage =
+                                        'Please select date and time.';
+                                  });
+                                  return;
+                                }
+
+                                if (_showDeadline &&
+                                    (_selectedDeadline == null ||
+                                        _selectedDeadline!
+                                            .isBefore(_selectedDate!) ||
+                                        _selectedDeadline!.isAtSameMomentAs(
+                                            DateTime(
+                                                _selectedDate!.year,
+                                                _selectedDate!.month,
+                                                _selectedDate!.day,
+                                                _selectedTime!.hour,
+                                                _selectedTime!.minute)) ||
+                                        _selectedDeadline!.isBefore(DateTime(
+                                            _selectedDate!.year,
+                                            _selectedDate!.month,
+                                            _selectedDate!.day,
+                                            _selectedTime!.hour,
+                                            _selectedTime!.minute)))) {
+                                  setState(() {
+                                    _errorMessage =
+                                        'Waktu Deadline tidak boleh di set lebih awal dari waktu awal';
+                                  });
+                                  return;
+                                }
+
+                                final dateTime = DateTime(
+                                  _selectedDate!.year,
+                                  _selectedDate!.month,
+                                  _selectedDate!.day,
+                                  _selectedTime!.hour,
+                                  _selectedTime!.minute,
+                                );
+                                final newActivity = Activity(
+                                  id: '',
+                                  title: _titleController.text,
+                                  description: _descriptionController.text,
+                                  timestamp: dateTime,
+                                  backgroundColor: _selectedBackgroundColor,
+                                  pinned: false,
+                                  favorite: false,
+                                  deadline:
+                                      _showDeadline ? _selectedDeadline : null,
+                                  completed: false,
+                                );
+                                if (activity == null) {
+                                  _addActivity(newActivity);
+                                  _showSnackBar(context, 'Activity added');
+                                } else {
+                                  final updatedActivity = Activity(
+                                    id: activity.id,
                                     title: _titleController.text,
                                     description: _descriptionController.text,
                                     timestamp: dateTime,
                                     backgroundColor: _selectedBackgroundColor,
-                                    pinned: false,
-                                    favorite: false,
+                                    pinned: activity.pinned,
+                                    favorite: activity.favorite,
                                     deadline: _showDeadline
                                         ? _selectedDeadline
                                         : null,
-                                    completed: false,
+                                    completed: activity.completed,
                                   );
-                                  if (activity == null) {
-                                    _addActivity(newActivity);
-                                  } else {
-                                    final updatedActivity = Activity(
-                                      id: activity.id,
-                                      title: _titleController.text,
-                                      description: _descriptionController.text,
-                                      timestamp: dateTime,
-                                      backgroundColor: _selectedBackgroundColor,
-                                      pinned: activity.pinned,
-                                      favorite: activity.favorite,
-                                      deadline: _showDeadline
-                                          ? _selectedDeadline
-                                          : null,
-                                      completed: activity.completed,
-                                    );
-                                    _editActivity(updatedActivity);
-                                  }
-                                  Navigator.of(context)
-                                      .pop(true); // Close modal and save
+                                  _editActivity(updatedActivity);
                                 }
+                                Navigator.of(context)
+                                    .pop(true); // Close modal and save
                               },
                               child: Text(activity == null ? 'Add' : 'Update'),
                             ),
@@ -354,14 +430,15 @@ class _ActivityFormState extends State<ActivityForm> {
       },
     );
 
-    // Handle the result when modal is closed
     if (result != null && !result) {
       setState(() {
-        _showDeadline = false; // Reset _showDeadline if user cancels
+        _showDeadline = false;
+        _errorMessage = null;
       });
     }
   }
 
+  //shorthing
   Stream<List<Activity>> _getActivities() {
     return _firestore
         .collection('activities')
@@ -369,17 +446,14 @@ class _ActivityFormState extends State<ActivityForm> {
         .map((snapshot) =>
             snapshot.docs.map((doc) => Activity.fromFirestore(doc)).toList())
         .map((activities) {
-      if (activities.isEmpty) return []; // Return empty list if no data
+      if (activities.isEmpty) return [];
 
-      // Sort activities
       activities.sort((a, b) {
-        // Sort pinned activities to the top
         if (a.pinned && !b.pinned) {
           return -1;
         } else if (!a.pinned && b.pinned) {
           return 1;
         } else {
-          // Sort non-pinned activities based on title
           return _sortAscending
               ? a.title.compareTo(b.title)
               : b.title.compareTo(a.title);
@@ -400,6 +474,7 @@ class _ActivityFormState extends State<ActivityForm> {
         .toList();
   }
 
+  //detail activity
   void _showActivityDetails(Activity activity) {
     bool _completed = activity.completed;
 
@@ -619,17 +694,6 @@ class _ActivityFormState extends State<ActivityForm> {
           }
 
           final activities = _filterActivities(snapshot.data!);
-          // Sort activities with pinned items first
-          activities.sort((a, b) {
-            if (a.pinned && !b.pinned) {
-              return -1;
-            } else if (!a.pinned && b.pinned) {
-              return 1;
-            } else {
-              // Sort by timestamp if both are pinned or both are not pinned
-              return b.timestamp.compareTo(a.timestamp);
-            }
-          });
 
           return ListView.builder(
             padding: const EdgeInsets.all(8.0),
@@ -694,8 +758,10 @@ class _ActivityFormState extends State<ActivityForm> {
                     onSelected: (value) {
                       if (value == 'edit') {
                         _showAddActivityModalSheet(context, activity);
+                        _showSnackBar(context, 'Activity updated');
                       } else if (value == 'delete') {
                         _deleteActivity(activity);
+                        _showSnackBar(context, 'Activity deleted');
                       } else if (value == 'pin') {
                         _togglePin(activity);
                       } else if (value == 'favorite') {
@@ -733,5 +799,33 @@ class _ActivityFormState extends State<ActivityForm> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+        ),
+      ),
+      backgroundColor: Colors.black87,
+      elevation: 6.0,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      action: SnackBarAction(
+        label: 'Close',
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
